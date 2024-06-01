@@ -15,7 +15,7 @@ const app = express();
 
 // middleware
 // custom middleware logger
-app.use(logger);
+// app.use(logger);
 
 // Cross Origin Resource Sharing
 app.use(cors());
@@ -26,15 +26,15 @@ app.use(express.json());
 // middleware for cookies
 app.use(cookieParser());
 
-// middleware for custom error handler
-app.use(errorHandler);
-
 // routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.use("/v1/bff", router);
+
+// middleware for custom error handler
+// app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);

@@ -1,17 +1,17 @@
-import express from 'express';
+// authController.js
 
-const authController = {
-    signUp: (req, res) => {
-        // res.json(req.body);
-        res.send('SignUp!');
-    },
-    signIn: (req, res) => {
-        // res.json(req.body);
-        res.send('SignIn!');
-    },
-    verify: (req, res) => {
-        res.send('SignUp Verify!');
-    }
+const signUp = (req, res) => {
+  // res.json(req.body);
+  res.send("SignUp!");
 };
 
-export default authController;
+const signIn = (req, res) => {
+  // res.json(req.body);
+  res.send("SignIn!");
+};
+
+const signOut = (req, res) => {
+  res.send("SignOut!");
+};
+
+export { signUp, signIn, signOut };
