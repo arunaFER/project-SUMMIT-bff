@@ -2,6 +2,9 @@ import {
   findAllUsers,
   findUserById,
   saveUser,
+  updateUser,
+  deleteUser,
+  findUserByUsername,
 } from "../services/userService.js";
 
 const findAll = async (req, res) => {
@@ -31,9 +34,28 @@ const findById = async (req, res) => {
   }
 };
 
+const findByUsername = async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    console.log(`Finding user by username: ${username}`);
+
+    if (username) {
+      const user = await findUserByUsername(username);
+      res.json(user);
+    } else {
+      res.status(400).json({ message: "No username sent" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const save = async (req, res) => {
   try {
     const userData = req.body;
+
+    console.log("Saving user");
 
     // Validate the incoming request payload
     if (
@@ -53,12 +75,50 @@ const save = async (req, res) => {
   }
 };
 
-const update = (req, res) => {
-  res.send("update user!");
+const update = async (req, res) => {
+  try {
+    const userData = req.body;
+
+    console.log(userData);
+
+    console.log(`Updating user for userID: ${userData.userId}`);
+
+    // Validate the incoming request payload
+    if (
+      !userData.userId ||
+      !userData.userName ||
+      !userData.userEmail ||
+      !userData.password ||
+      !userData.accountType ||
+      !userData.accountStatus
+    ) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    console.log("3");
+
+    const updatedUser = await updateUser(userData);
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-const deleteById = (req, res) => {
-  res.send("delete user by Id!");
+const deleteById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    console.log(`Deleting user by userID: ${userId}`);
+
+    if (userId) {
+      const response = await deleteUser(userId);
+      res.send(response);
+    } else {
+      res.status(400).json({ message: "No user id sent" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-export { findAll, findById, save, update, deleteById };
+export { findAll, findById, findByUsername, save, update, deleteById };
