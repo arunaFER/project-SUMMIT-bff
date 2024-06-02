@@ -1,4 +1,4 @@
-import { userSignUp } from "../services/authService.js";
+import { userSignUp, userSignIn } from "../services/authService.js";
 import CustomError from "../error/customError.js";
 
 const signUp = async (req, res) => {
@@ -48,7 +48,8 @@ const signIn = async (req, res) => {
         .json({ message: "Username and password required" });
     }
 
-    res.send(`Username: ${userName} Password: ${password}`);
+    const token = await userSignIn(userName, password);
+    res.status(200).send({ data: token, message: "logged in successfully" });
   } catch (error) {
     if (error instanceof CustomError) {
       res
