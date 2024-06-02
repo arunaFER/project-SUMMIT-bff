@@ -1,11 +1,27 @@
+import Joi from "joi";
+import passwordComplexity from "joi-password-complexity";
+
 import { userSignUp, userSignIn } from "../services/authService.js";
 import CustomError from "../error/customError.js";
+
+// Define Joi schema for user data validation
+const signUpSchema = Joi.object({
+  userName: Joi.string().required().label("Username"),
+  userEmail: Joi.string().email().required().label("Email"),
+  password: passwordComplexity().required().label("Password"),
+});
 
 const signUp = async (req, res) => {
   try {
     const userData = req.body;
 
     console.log("authController: signUp");
+
+    // // Validate the incoming request payload using Joi schema
+    // const { error } = signUpSchema.validate(userData);
+    // if (error) {
+    //   return res.status(400).json({ message: error.details[0].message });
+    // }
 
     // Validate the incoming request payload
     if (

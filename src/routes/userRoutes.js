@@ -11,10 +11,12 @@ import {
 const userRouter = Router();
 
 userRouter.get("/", findAll);
-userRouter.get("/:id", findById);
-userRouter.get("/username/:username", findByUsername);
 userRouter.post("/", save);
 userRouter.put("/", update);
+
+userRouter.get("/:id", findById);
 userRouter.delete("/:id", deleteById);
+
+userRouter.get("/username/:username", findByUsername);
 
 export default userRouter;
