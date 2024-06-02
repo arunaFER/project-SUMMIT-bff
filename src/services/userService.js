@@ -1,6 +1,5 @@
 import axios from "axios";
 import handleServiceError from "../error/serviceError.js";
-import { ca } from "date-fns/locale";
 
 async function findAllUsers() {
   try {
@@ -32,7 +31,11 @@ async function findUserByUsername(username) {
     // console.log("Response data:", JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
-    handleServiceError(error);
+    if (error.response && error.response.status === 404) {
+      return null;
+    } else {
+      handleServiceError(error);
+    }
   }
 }
 
@@ -42,7 +45,6 @@ async function saveUser(userData) {
       "http://localhost:8080/api/v1/user/",
       userData
     );
-
     // console.log("Response data:", JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
@@ -56,7 +58,6 @@ async function updateUser(userData) {
       "http://localhost:8080/api/v1/user/",
       userData
     );
-
     // console.log("Response data:", JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
@@ -69,6 +70,7 @@ async function deleteUser(userId) {
     const response = await axios.delete(
       `http://localhost:8080/api/v1/user/${userId}`
     );
+    // console.log("Response data:", JSON.stringify(response.data, null, 2));
     return response.data;
   } catch (error) {
     handleServiceError(error);

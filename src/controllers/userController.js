@@ -6,6 +6,7 @@ import {
   deleteUser,
   findUserByUsername,
 } from "../services/userService.js";
+import CustomError from "../error/customError.js";
 
 const findAll = async (req, res) => {
   try {
@@ -13,7 +14,15 @@ const findAll = async (req, res) => {
     const users = await findAllUsers();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 
@@ -30,7 +39,15 @@ const findById = async (req, res) => {
       res.status(400).json({ message: "No user id sent" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 
@@ -47,7 +64,15 @@ const findByUsername = async (req, res) => {
       res.status(400).json({ message: "No username sent" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 
@@ -71,7 +96,15 @@ const save = async (req, res) => {
     const savedUser = await saveUser(userData);
     res.json(savedUser);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 
@@ -100,7 +133,15 @@ const update = async (req, res) => {
     const updatedUser = await updateUser(userData);
     res.json(updatedUser);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 
@@ -117,7 +158,15 @@ const deleteById = async (req, res) => {
       res.status(400).json({ message: "No user id sent" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
   }
 };
 

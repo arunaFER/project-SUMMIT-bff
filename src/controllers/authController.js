@@ -1,13 +1,65 @@
-// authController.js
+import { userSignUp } from "../services/authService.js";
+import CustomError from "../error/customError.js";
 
-const signUp = (req, res) => {
-  // res.json(req.body);
-  res.send("SignUp!");
+const signUp = async (req, res) => {
+  try {
+    const userData = req.body;
+
+    console.log("authController: signUp");
+
+    // Validate the incoming request payload
+    if (
+      !userData.userName ||
+      !userData.userEmail ||
+      !userData.password ||
+      !userData.accountType ||
+      !userData.accountStatus
+    ) {
+      return res.status(400).json({ message: "User missing required fields" });
+    }
+
+    const savedUser = await userSignUp(userData);
+    res.json(savedUser);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
+  }
 };
 
-const signIn = (req, res) => {
-  // res.json(req.body);
-  res.send("SignIn!");
+const signIn = async (req, res) => {
+  try {
+    const { userName, password } = req.body;
+
+    console.log("authController: signIn");
+
+    console.log(`Username: ${userName} Password: ${password}`);
+
+    // Validate the incoming request payload
+    if (!userName || !password) {
+      return res
+        .status(400)
+        .json({ message: "Username and password required" });
+    }
+
+    res.send(`Username: ${userName} Password: ${password}`);
+  } catch (error) {
+    if (error instanceof CustomError) {
+      res
+        .status(error.statusCode)
+        .json({ code: error.code, message: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ code: "INTERNAL_SERVER_ERROR", message: error.message });
+    }
+  }
 };
 
 const signOut = (req, res) => {
